@@ -24,10 +24,11 @@ public class RestClient {
 		// TODO: implement a HTTP POST on the service to post the message
 		OkHttpClient client = new OkHttpClient();
 		RequestBody body = RequestBody.create(JSON, new Gson().toJson(new AccessMessage(message)));
-		Request request = new Request.Builder().url(URL + logpath).get().build();
+		Request request = new Request.Builder().url(URL + logpath).post(body).build();
 		
 		try (Response response = client.newCall(request).execute()) {
-			System.out.println(response.body().string());	
+			String jsonString = response.body().string();
+			System.out.println(jsonString);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +46,9 @@ public class RestClient {
 		Request request = new Request.Builder().url(URL + codepath).get().build();
 		
 		try (Response response = client.newCall(request).execute()) {
-			System.out.println(response.body().string());
+			String jsonString = response.body().string();
+			System.out.println(jsonString);
+			code = new Gson().fromJson(jsonString, AccessCode.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
